@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Six days, one city, you & me</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Fraunces:ital,opsz,wght,SOFT@0,9..144,400..800,100;1,9..144,400..700,100&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#FFE6EE; --card:#FFF8FB; --ink:#3B1238; --muted:#7A4C70;
+  --rose:#E0335F; --rose-soft:#FFC9D8; --marigold:#F3A712; --leaf:#1F7A55;
+  --line:#F2B9CB; --shadow:0 2px 0 #F2B9CB;
+  --serif:"Fraunces", Georgia, "Times New Roman", serif;
+  --hand:"Caveat", "Segoe Print", "Comic Sans MS", cursive;
+  color-scheme:light;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --paper:#1C0A21; --card:#2A1231; --ink:#FBE7F0; --muted:#C9A3BF;
+    --rose:#FF6B8F; --rose-soft:#5A1F45; --marigold:#FFC24B; --leaf:#5FD39B;
+    --line:#4A2150; --shadow:0 2px 0 #4A2150; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#1C0A21; --card:#2A1231; --ink:#FBE7F0; --muted:#C9A3BF;
+  --rose:#FF6B8F; --rose-soft:#5A1F45; --marigold:#FFC24B; --leaf:#5FD39B;
+  --line:#4A2150; --shadow:0 2px 0 #4A2150; color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--serif);
+  font-variation-settings:"SOFT" 100;font-size:1.05rem;line-height:1.6;overflow-x:hidden}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--marigold);outline-offset:3px;border-radius:6px}
+
+/* garland */
+.garland{position:relative;height:70px;overflow:hidden;pointer-events:none}
+.garland span{position:absolute;width:18px;height:18px;border-radius:50%;
+  background:radial-gradient(circle at 35% 35%, #FFD66B, var(--marigold) 55%, #C97A00);
+  box-shadow:0 1px 0 rgba(0,0,0,.15)}
+.garland span.r{background:radial-gradient(circle at 35% 35%, #FF9BB4, var(--rose) 60%, #9E1640)}
+.garland i{position:absolute;width:10px;height:16px;background:var(--leaf);border-radius:0 100% 0 100%}
+
+.wrap{max-width:660px;margin:0 auto;padding:0 20px 80px}
+
+/* hero */
+.hero{text-align:center;padding:10px 0 30px}
+.hero h1{font-size:clamp(2.2rem,8vw,3.4rem);line-height:1.05;margin:.2em 0 .1em;font-weight:750;letter-spacing:-.02em}
+.hero .sub{font-family:var(--hand);font-size:1.6rem;color:var(--rose);margin:0}
+
+.envelope{position:relative;width:min(320px,86vw);height:210px;margin:40px auto 0;cursor:pointer;
+  border:none;background:none;padding:0;perspective:800px}
+.env-back{position:absolute;inset:0;background:var(--rose);border-radius:10px}
+.env-front{position:absolute;inset:0;border-radius:10px;z-index:3;
+  background:
+   linear-gradient(to top right, transparent 49.5%, #C9244F 50%) left/50% 100% no-repeat,
+   linear-gradient(to top left, transparent 49.5%, #C9244F 50%) right/50% 100% no-repeat;
+  clip-path:polygon(0 0,50% 55%,100% 0,100% 100%,0 100%);
+  background-color:#E8456E}
+.env-flap{position:absolute;left:0;right:0;top:0;height:60%;z-index:4;transform-origin:top;
+  background:#D12C58;clip-path:polygon(0 0,100% 0,50% 100%);transition:transform .6s ease, z-index 0s .3s}
+.seal{position:absolute;left:50%;top:48%;transform:translate(-50%,-50%);z-index:5;width:54px;height:54px;border-radius:50%;
+  background:radial-gradient(circle at 35% 35%, #FFD66B, var(--marigold) 60%, #B86E00);
+  display:grid;place-items:center;font-size:1.5rem;transition:opacity .3s, transform .3s;
+  box-shadow:0 3px 0 rgba(0,0,0,.2)}
+.letter{position:absolute;left:8%;right:8%;top:10%;height:80%;z-index:2;background:var(--card);border-radius:6px;
+  padding:16px;font-family:var(--hand);font-size:1.45rem;line-height:1.2;color:var(--ink);text-align:left;
+  transition:transform .8s cubic-bezier(.2,.9,.3,1.2) .35s}
+.envelope.open .env-flap{transform:rotateX(180deg);z-index:1}
+.envelope.open .seal{opacity:0;transform:translate(-50%,-50%) scale(.3)}
+.envelope.open .letter{transform:translateY(-62%)}
+.tap-hint{font-family:var(--hand);font-size:1.35rem;color:var(--muted);margin-top:14px}
+.envelope:not(.open){animation:wobble 2.6s ease-in-out infinite}
+@keyframes wobble{0%,86%,100%{transform:rotate(0)}89%{transform:rotate(-3deg)}93%{transform:rotate(3deg)}96%{transform:rotate(-1.5deg)}}
+
+/* question */
+.ask{display:none;text-align:center;margin-top:120px}
+.ask.show{display:block}
+.ask h2{font-size:1.7rem;margin:0 0 18px;font-weight:650}
+.ask-zone{position:relative;height:150px}
+.btn{border:2px solid var(--ink);background:var(--card);border-radius:999px;padding:.55em 1.4em;font-weight:650;
+  box-shadow:0 4px 0 var(--ink);transition:transform .15s}
+.btn:active{transform:translateY(3px);box-shadow:0 1px 0 var(--ink)}
+.btn.yes{background:var(--rose);color:#fff;border-color:var(--ink)}
+#yesBtn{position:absolute;left:22%;top:20px;transition:transform .25s}
+#noBtn{position:absolute;left:58%;top:20px;transition:left .25s, top .25s}
+.no-msg{font-family:var(--hand);font-size:1.35rem;color:var(--rose);min-height:1.6em}
+
+/* locked content */
+#content{display:none}
+#content.show{display:block}
+
+section{margin-top:64px}
+h2.sec{font-size:clamp(1.6rem,5vw,2.1rem);line-height:1.15;margin:0 0 .3em;font-weight:700;letter-spacing:-.01em}
+.scribble{font-family:var(--hand);font-size:1.4rem;color:var(--rose);margin:0 0 18px;line-height:1.2}
+.card{background:var(--card);border:2px solid var(--line);border-radius:18px;padding:20px}
+
+/* countdown */
+.count{display:flex;gap:10px;flex-wrap:wrap}
+.count div{flex:1 1 70px;text-align:center;background:var(--card);border:2px solid var(--line);border-radius:14px;padding:12px 6px}
+.count b{display:block;font-size:2.2rem;line-height:1;font-weight:750;color:var(--rose);font-variant-numeric:tabular-nums}
+.count small{color:var(--muted);font-size:.9rem}
+
+/* days */
+.tabs{display:flex;gap:8px;overflow-x:auto;padding:4px 2px 12px;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex:0 0 auto;border:2px solid var(--line);background:var(--card);border-radius:12px;padding:8px 12px;text-align:center;min-width:68px;line-height:1.15}
+.tab .d{display:block;font-size:.8rem;color:var(--muted)}
+.tab .n{display:block;font-size:1.5rem;font-weight:750}
+.tab .e{display:block;font-size:1.1rem}
+.tab[aria-selected="true"]{background:var(--rose);border-color:var(--rose);color:#fff}
+.tab[aria-selected="true"] .d{color:#ffe4ec}
+.day-title{font-family:var(--hand);font-size:1.7rem;color:var(--rose);margin:4px 0 12px}
+.stops{list-style:none;margin:0;padding:0;position:relative}
+.stops::before{content:"";position:absolute;left:19px;top:10px;bottom:10px;border-left:3px dotted var(--line)}
+.stop{position:relative;padding-left:52px;margin-bottom:14px}
+.stop .dot{position:absolute;left:0;top:4px;width:40px;height:40px;border-radius:50%;display:grid;place-items:center;
+  background:var(--card);border:2px solid var(--line);font-size:1.2rem}
+.stop details{background:var(--card);border:2px solid var(--line);border-radius:14px;padding:10px 14px}
+.stop summary{cursor:pointer;list-style:none}
+.stop summary::-webkit-details-marker{display:none}
+.stop .t{font-size:.85rem;color:var(--muted);display:block}
+.stop .nm{font-weight:650;font-size:1.1rem}
+.stop .bl{display:block;color:var(--muted);font-size:.95rem}
+.stop .peek{font-family:var(--hand);color:var(--rose);font-size:1.15rem;display:block;margin-top:2px}
+.stop details[open] .peek{display:none}
+.stop .note{font-family:var(--hand);font-size:1.45rem;line-height:1.25;margin:10px 0 2px;color:var(--ink);
+  border-top:2px dashed var(--line);padding-top:8px}
+
+/* diyas */
+.diyas{display:flex;justify-content:space-between;gap:6px;flex-wrap:wrap;padding:10px 0 4px}
+.diya{border:none;background:none;padding:0;width:15%;min-width:44px;aspect-ratio:1/1.3;position:relative}
+.diya svg{width:100%;height:100%;overflow:visible}
+.flame{opacity:0;transform-origin:50% 100%;transition:opacity .3s}
+.diya.lit .flame{opacity:1;animation:flick 1.2s ease-in-out infinite alternate}
+.diya.lit .glow{opacity:.55}
+.glow{opacity:0;transition:opacity .4s}
+@keyframes flick{from{transform:scale(1,1) rotate(-2deg)}to{transform:scale(.92,1.08) rotate(2deg)}}
+.diya-msg{font-family:var(--hand);font-size:1.6rem;color:var(--marigold);text-align:center;min-height:2.2em;margin-top:8px;line-height:1.2}
+
+/* game */
+.game{position:relative;height:340px;border-radius:18px;overflow:hidden;border:2px solid var(--line);
+  background:linear-gradient(var(--card),var(--paper));touch-action:manipulation;user-select:none;-webkit-user-select:none}
+.game .hud{position:absolute;left:12px;right:12px;top:8px;display:flex;justify-content:space-between;font-weight:700;z-index:3}
+.game .fall{position:absolute;top:-50px;font-size:2rem;border:none;background:none;padding:6px;line-height:1;z-index:2}
+.game .pop{position:absolute;font-family:var(--hand);font-size:1.5rem;font-weight:700;pointer-events:none;animation:up .7s forwards;z-index:4}
+@keyframes up{to{transform:translateY(-40px);opacity:0}}
+.game .overlay{position:absolute;inset:0;display:grid;place-items:center;text-align:center;padding:20px;z-index:5;
+  background:color-mix(in srgb, var(--card) 88%, transparent)}
+.game .overlay p{margin:.2em 0}
+.legend{font-size:.95rem;color:var(--muted);margin-top:8px}
+
+/* shaker */
+.shake-row{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.shaker{font-size:3.4rem;border:none;background:none;padding:0;line-height:1}
+.shaker.go{animation:shk .6s ease}
+@keyframes shk{0%,100%{transform:rotate(0)}20%{transform:rotate(-25deg) translateY(-6px)}40%{transform:rotate(25deg)}60%{transform:rotate(-20deg) translateY(-6px)}80%{transform:rotate(15deg)}}
+.fortune{flex:1 1 220px;font-family:var(--hand);font-size:1.5rem;line-height:1.25;min-height:2.5em}
+
+/* scratch */
+.scratch{position:relative;width:100%;max-width:420px;height:170px;margin:0 auto;border-radius:16px;overflow:hidden;
+  border:2px dashed var(--rose);background:var(--card)}
+.coupon{position:absolute;inset:0;display:grid;place-items:center;text-align:center;padding:16px}
+.coupon b{display:block;font-size:1.25rem;line-height:1.25}
+.coupon span{font-family:var(--hand);color:var(--rose);font-size:1.3rem}
+.scratch canvas{position:absolute;inset:0;width:100%;height:100%;touch-action:none;cursor:grab}
+.center{text-align:center;margin-top:14px}
+
+/* packing */
+.pack{list-style:none;padding:0;margin:0}
+.pack li{border-bottom:2px dotted var(--line)}
+.pack label{display:flex;gap:12px;align-items:center;padding:10px 2px;cursor:pointer}
+.pack input{appearance:none;-webkit-appearance:none;width:24px;height:24px;flex:0 0 24px;border:2px solid var(--ink);border-radius:7px;display:grid;place-items:center;margin:0;background:var(--card)}
+.pack input:checked{background:var(--rose);border-color:var(--rose)}
+.pack input:checked::after{content:"♥";color:#fff;font-size:.8rem}
+.pack input:checked + span{text-decoration:line-through;color:var(--muted)}
+
+footer{text-align:center;margin-top:80px;font-family:var(--hand);font-size:1.6rem;line-height:1.25;color:var(--muted)}
+footer .big{font-size:2.4rem;color:var(--rose);display:block}
+
+/* confetti */
+.confetti{position:fixed;top:-40px;font-size:1.6rem;pointer-events:none;z-index:50;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(110vh) rotate(540deg)}}
+
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+  html{scroll-behavior:auto}
+}
+</style>
+</head>
+<body>
+<div class="garland" id="garland" aria-hidden="true"></div>
+
+<div class="wrap">
+  <header class="hero">
+    <p class="sub">psst, this is for you</p>
+    <h1>Six days.<br>One city.<br>You &amp; me.</h1>
+
+    <button class="envelope" id="envelope" aria-label="Open the letter">
+      <div class="env-back"></div>
+      <div class="letter">Hi Cutie,<br>I planned a little something. Bangalore, Nov 5–10. It’s all for you.</div>
+      <div class="env-front"></div>
+      <div class="env-flap"></div>
+      <div class="seal">💌</div>
+    </button>
+    <p class="tap-hint" id="tapHint">tap the envelope</p>
+
+    <div class="ask" id="ask">
+      <h2>So… will you be my date for all six days?</h2>
+      <div class="ask-zone" id="askZone">
+        <button class="btn yes" id="yesBtn">Yes!</button>
+        <button class="btn" id="noBtn">No</button>
+      </div>
+      <p class="no-msg" id="noMsg" aria-live="polite"></p>
+    </div>
+  </header>
+
+  <main id="content">
+    <section>
+      <h2 class="sec">Until I see you at arrivals</h2>
+      <p class="scribble">(I’ll be the one grinning like an idiot)</p>
+      <div class="count" id="count">
+        <div><b id="cd">0</b><small>days</small></div>
+        <div><b id="ch">0</b><small>hours</small></div>
+        <div><b id="cm">0</b><small>minutes</small></div>
+        <div><b id="cs">0</b><small>seconds</small></div>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="sec">The plan</h2>
+      <p class="scribble">tap any stop for a secret note from me</p>
+      <div class="tabs" role="tablist" id="tabs"></div>
+      <div class="card" role="tabpanel" id="panel"></div>
+    </section>
+
+    <section>
+      <h2 class="sec">Light a diya for every day we get</h2>
+      <p class="scribble">you’re here for Diwali, so let’s start early</p>
+      <div class="card">
+        <div class="diyas" id="diyas"></div>
+        <p class="diya-msg" id="diyaMsg" aria-live="polite"></p>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="sec">Beat the Bangalore traffic</h2>
+      <p class="scribble">catch the good stuff, dodge the jams. 20 seconds.</p>
+      <div class="game" id="game">
+        <div class="hud"><span>Score: <span id="score">0</span></span><span id="timer">20s</span></div>
+        <div class="overlay" id="gameOverlay">
+          <div>
+            <p style="font-size:1.3rem;font-weight:700">Ready, traffic warrior?</p>
+            <p class="legend">❤️ +1 &nbsp; ☕ +2 &nbsp; 🍕 +3 &nbsp; 🛺 🚦 −3</p>
+            <p style="margin-top:14px"><button class="btn yes" id="startGame">Start</button></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="sec">Your cocktail fortune</h2>
+      <p class="scribble">for Soka, Dali &amp; Gala and Spirit Forward</p>
+      <div class="card shake-row">
+        <button class="shaker" id="shaker" aria-label="Shake for a fortune">🍸</button>
+        <p class="fortune" id="fortune" aria-live="polite">Shake the glass and see what the night holds.</p>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="sec">Love coupons</h2>
+      <p class="scribble">scratch to reveal. all redeemable, no expiry.</p>
+      <div class="scratch" id="scratch">
+        <div class="coupon" id="coupon"></div>
+        <canvas id="scratchCanvas" aria-label="Scratch card, drag to reveal"></canvas>
+      </div>
+      <p class="center"><button class="btn" id="newCoupon">Get another coupon</button></p>
+    </section>
+
+    <section>
+      <h2 class="sec">Pack these, please</h2>
+      <p class="scribble">I checked the weather. I check everything for you.</p>
+      <div class="card"><ul class="pack" id="pack"></ul></div>
+    </section>
+
+    <footer>
+      <span class="big">See you at 2:30 AM on the 5th ♥</span>
+      Made by me, for you.<br>Now go pack.
+    </footer>
+  </main>
+</div>
+
+<script>
+(function(){
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function store(k,v){try{if(v===undefined)return localStorage.getItem(k);localStorage.setItem(k,v)}catch(e){return null}}
+
+  /* garland */
+  var g=document.getElementById('garland');
+  function drawGarland(){
+    g.innerHTML='';var w=g.clientWidth, n=Math.max(14,Math.floor(w/22)), swags=Math.max(2,Math.round(w/260));
+    for(var i=0;i<=n;i++){
+      var x=i/n*w, p=(i/n*swags)%1, y=6+Math.sin(p*Math.PI)*34;
+      var s=document.createElement('span'); if(i%3===1)s.className='r';
+      s.style.left=(x-9)+'px'; s.style.top=y+'px'; g.appendChild(s);
+      if(i%3===0){var l=document.createElement('i');l.style.left=(x-2)+'px';l.style.top=(y+14)+'px';g.appendChild(l)}
+    }
+  }
+  drawGarland(); window.addEventListener('resize',drawGarland);
+
+  /* confetti */
+  function confetti(n){
+    if(reduce)return; var em=['💖','💕','🌸','✨','🪔','💗'];
+    for(var i=0;i<n;i++){var c=document.createElement('div');c.className='confetti';
+      c.textContent=em[i%em.length];c.style.left=Math.random()*100+'vw';
+      c.style.animationDuration=(2.5+Math.random()*2)+'s';c.style.animationDelay=Math.random()*.8+'s';
+      document.body.appendChild(c);setTimeout(function(el){el.remove()},5000,c)}
+  }
+
+  /* envelope + question */
+  var env=document.getElementById('envelope'), ask=document.getElementById('ask'),
+      content=document.getElementById('content'), hint=document.getElementById('tapHint');
+  env.addEventListener('click',function(){
+    if(env.classList.contains('open'))return;
+    env.classList.add('open'); hint.textContent='';
+    setTimeout(function(){ask.classList.add('show')},reduce?0:900);
+  });
+
+  var noBtn=document.getElementById('noBtn'), yesBtn=document.getElementById('yesBtn'),
+      zone=document.getElementById('askZone'), noMsg=document.getElementById('noMsg'), tries=0, yesScale=1;
+  var lines=['Nope, wrong button.','Are you sure?','The No button is shy.','It’s scared of you.','Just press Yes, cutie.','There is literally no escape.','Yes is getting bigger for a reason.'];
+  function dodge(e){
+    if(e)e.preventDefault();
+    var zw=zone.clientWidth-noBtn.offsetWidth, zh=zone.clientHeight-noBtn.offsetHeight;
+    noBtn.style.left=Math.max(0,Math.random()*zw)+'px'; noBtn.style.top=Math.max(0,Math.random()*zh)+'px';
+    noMsg.textContent=lines[Math.min(tries,lines.length-1)]; tries++;
+    yesScale=Math.min(2.2,yesScale+.18); yesBtn.style.transform='scale('+yesScale+')';
+  }
+  noBtn.addEventListener('mouseenter',dodge);
+  noBtn.addEventListener('touchstart',dodge,{passive:false});
+  noBtn.addEventListener('click',dodge);
+  function unlock(celebrate){
+    content.classList.add('show');
+    if(celebrate){
+      ask.querySelector('h2').textContent='I knew you’d say yes 🥹';
+      zone.style.display='none'; noMsg.textContent='scroll down, it’s all yours';
+      confetti(60); store('said-yes','1');
+      setTimeout(function(){content.scrollIntoView({behavior:reduce?'auto':'smooth'})},1200);
+    }
+  }
+  yesBtn.addEventListener('click',function(){unlock(true)});
+  if(store('said-yes')==='1'){env.classList.add('open');hint.textContent='';ask.classList.add('show');
+    ask.querySelector('h2').textContent='You already said yes. No take-backs.';zone.style.display='none';unlock(false)}
+
+  /* countdown */
+  var target=new Date('2026-11-05T02:30:00+05:30').getTime(), end=new Date('2026-11-10T17:30:00+05:30').getTime();
+  function tick(){
+    var now=Date.now(), d=target-now, box=document.getElementById('count');
+    if(d<=0){
+      box.innerHTML='<div style="flex:1 1 100%"><b>'+(now<end?'You’re here!':'Best six days ever.')+'</b><small>'+(now<end?'stop reading, come kiss me':'thank you for every second')+'</small></div>';
+      return;
+    }
+    document.getElementById('cd').textContent=Math.floor(d/864e5);
+    document.getElementById('ch').textContent=Math.floor(d/36e5)%24;
+    document.getElementById('cm').textContent=Math.floor(d/6e4)%60;
+    document.getElementById('cs').textContent=Math.floor(d/1e3)%60;
+    setTimeout(tick,1000);
+  }
+  tick();
+
+  /* plan */
+  var days=[
+    {d:'Thu',n:5,e:'✈️',title:'you land, I melt',stops:[
+      ['🚗','2:30 AM','Airport pickup','Me, my car, and a very awake smile','First thing on the agenda: the longest hug of your life, right there at arrivals. Then I drive us home while you doze off.'],
+      ['😴','Late morning','Sleep in at home','Recover from the red-eye, no alarms','I’ll have coffee ready whenever you wake up. Take your time, you’re home now.'],
+      ['🍜','8:00 PM','Dinner in Indiranagar','A slow walk down 12th Main first','We walk slowly so I can show you off to the whole street.'],
+      ['🍹','9:30 PM','Soka','A tiny candlelit bar, one of Asia’s best','Dress cute. Not that it matters, I’ll be staring at you either way.']]},
+    {d:'Fri',n:6,e:'🍿',title:'idli, movies and a surreal bar',stops:[
+      ['☕','7:30 AM','Rameshwaram Cafe','Ghee podi idli and filter coffee','Yes, 7:30. I know. One bite of that ghee podi idli and you’ll forgive me, I promise.'],
+      ['🎬','9:30 AM','Movie at home','Blanket, snacks, your pick of film','You choose the movie. I’ll pretend I’m not tearing up at the sad bits.'],
+      ['🍳','1:00 PM','Cook lunch together','Making lunch at home','Me chef, you sous-chef. Or you supervise and taste-test, also acceptable.'],
+      ['🛋️','Afternoon','Rest at home','Recharge before tonight','Cuddles on the couch are mandatory. This is in the contract.'],
+      ['🎨','8:00 PM','Dali & Gala','A bar made for a painter and his muse','Fitting, because you’re mine.']]},
+    {d:'Sat',n:7,e:'🍕',title:'family day',stops:[
+      ['🥐','Morning','Slow morning','Breakfast in bed, no alarms','You order, I fetch. Today you don’t lift a finger.'],
+      ['👋','Early evening','Meet my sister','The big intro','She’s been so excited to meet you, and I can’t wait for you two to finally meet.'],
+      ['🍻','Evening','Drinks at Bob’s Bar','Beers, loud music, good chaos','Prepare for my sister telling you embarrassing stories about me. Please don’t believe all of them.'],
+      ['🍕','9:00 PM','Pizza at 4Ps','Already booked and sorted','Pizza makes everything better. I’ll be holding your hand under the table.']]},
+    {d:'Sun',n:8,e:'🪔',title:'Diwali with you',stops:[
+      ['🧁','11:00 AM','Indiranagar cafe hop','Brunch, then two or three more cafes','One rule today: we share everything. Yes, even your dessert.'],
+      ['🪔','Evening','Diwali evening','A rooftop dinner to watch the city light up','The whole city will be glowing tonight. I’ll still be looking at you.'],
+      ['🚗','11:00 PM','Midnight drive to Rasta Cafe','Mysore Road, windows down','Your playlist, my driving, the open highway and midnight maggi. My favourite kind of night.']]},
+    {d:'Mon',n:9,e:'🌅',title:'golden hour and martinis',stops:[
+      ['🛏️','Morning','Sleep in','As late as you want','No plans until you say so.'],
+      ['🏛️','1:00 PM','Church Street and MG Road','Old-school Bangalore, Koshy’s, aimless wandering','Lunch at Koshy’s, then wandering the OG heart of the city with my favourite person.'],
+      ['🌳','4:30 PM','Cubbon Park at golden hour','A long walk under the big trees','Holding hands in a park like we’re in a 90s Bollywood song. Also, I’m taking 400 photos of you. Apologies in advance.'],
+      ['🍸','8:30 PM','Bar Spirit Forward','Fancy martinis, last big night out','We dress up, we toast to us, we stay out late.']]},
+    {d:'Tue',n:10,e:'🛍️',title:'one last date',stops:[
+      ['🛍️','11:00 AM','Mall of Asia date','Lunch, shopping, dessert, on the way to the airport','You pick the shops, I carry the bags. Fair trade for holding your hand all day.'],
+      ['✈️','3:00 PM','Airport drop','For your 5:30 PM flight','Not goodbye, just see you soon. Check your bag after you leave. Just saying.']]}
+  ];
+  var tabs=document.getElementById('tabs'), panel=document.getElementById('panel');
+  function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;')}
+  function showDay(i){
+    [].forEach.call(tabs.children,function(t,j){t.setAttribute('aria-selected',j===i);t.tabIndex=j===i?0:-1});
+    var day=days[i], h='<p class="day-title">Nov '+day.n+': '+esc(day.title)+'</p><ol class="stops">';
+    day.stops.forEach(function(s){
+      h+='<li class="stop"><span class="dot" aria-hidden="true">'+s[0]+'</span><details><summary><span class="t">'+s[1]+'</span><span class="nm">'+esc(s[2])+'</span><span class="bl">'+esc(s[3])+'</span><span class="peek">tap for my note ♥</span></summary><p class="note">'+esc(s[4])+'</p></details></li>';
+    });
+    panel.innerHTML=h+'</ol>';
+  }
+  days.forEach(function(day,i){
+    var b=document.createElement('button');b.className='tab';b.setAttribute('role','tab');
+    b.innerHTML='<span class="d">'+day.d+'</span><span class="n">'+day.n+'</span><span class="e">'+day.e+'</span>';
+    b.addEventListener('click',function(){showDay(i)});
+    b.addEventListener('keydown',function(e){
+      if(e.key==='ArrowRight'||e.key==='ArrowLeft'){var k=(i+(e.key==='ArrowRight'?1:-1)+days.length)%days.length;showDay(k);tabs.children[k].focus()}
+    });
+    tabs.appendChild(b);
+  });
+  showDay(0);
+
+  /* diyas */
+  var dWrap=document.getElementById('diyas'), dMsg=document.getElementById('diyaMsg'), lit=0;
+  var dLines=['one for the hug at arrivals','one for idli at sunrise','one for meeting my sister','one for Diwali together','one for golden hour','one for every day after'];
+  var diyaSVG='<svg viewBox="0 0 60 78" aria-hidden="true"><ellipse class="glow" cx="30" cy="32" rx="26" ry="26" fill="#FFC24B"/><path class="flame" d="M30 14 C38 28 36 40 30 42 C24 40 22 28 30 14Z" fill="#FF9F1C"/><path class="flame" d="M30 24 C34 32 33 39 30 40 C27 39 26 32 30 24Z" fill="#FFF3B0"/><path d="M4 46 Q30 44 56 46 Q52 70 30 70 Q8 70 4 46Z" fill="#C2410C"/><path d="M4 46 Q30 52 56 46" stroke="#F3A712" stroke-width="3" fill="none"/><circle cx="18" cy="58" r="2.5" fill="#F3A712"/><circle cx="30" cy="61" r="2.5" fill="#F3A712"/><circle cx="42" cy="58" r="2.5" fill="#F3A712"/></svg>';
+  for(var i=0;i<6;i++){
+    (function(i){var b=document.createElement('button');b.className='diya';b.innerHTML=diyaSVG;
+      b.setAttribute('aria-label','Light diya '+(i+1));
+      b.addEventListener('click',function(){
+        if(b.classList.contains('lit'))return; b.classList.add('lit'); lit++;
+        dMsg.textContent=lit<6?dLines[i]:'All six are lit. Happy Diwali, my love. 🪔';
+        if(lit===6)confetti(40);
+      });dWrap.appendChild(b)})(i);
+  }
+
+  /* game */
+  var game=document.getElementById('game'), overlay=document.getElementById('gameOverlay'),
+      scoreEl=document.getElementById('score'), timerEl=document.getElementById('timer'), running=false, score=0;
+  var items=[['❤️',1],['❤️',1],['❤️',1],['☕',2],['☕',2],['🍕',3],['🛺',-3],['🚦',-3],['🛺',-3]];
+  function spawn(){
+    if(!running)return;
+    var it=items[Math.floor(Math.random()*items.length)], b=document.createElement('button');
+    b.className='fall'; b.textContent=it[0]; b.setAttribute('aria-label',it[1]>0?'catch':'avoid');
+    var w=game.clientWidth-50; b.style.left=Math.random()*w+'px';
+    var dur=2200+Math.random()*1600, start=null, h=game.clientHeight+60;
+    function step(ts){if(!start)start=ts;var p=(ts-start)/dur;
+      if(!b.isConnected)return; if(p>=1||!running){b.remove();return}
+      b.style.transform='translateY('+(p*h)+'px)';requestAnimationFrame(step)}
+    b.addEventListener('pointerdown',function(e){
+      e.preventDefault(); if(!running)return; score+=it[1]; scoreEl.textContent=score;
+      var pop=document.createElement('div');pop.className='pop';pop.textContent=(it[1]>0?'+':'')+it[1];
+      pop.style.color=it[1]>0?'var(--rose)':'var(--muted)';
+      var r=b.getBoundingClientRect(), gr=game.getBoundingClientRect();
+      pop.style.left=(r.left-gr.left)+'px';pop.style.top=(r.top-gr.top)+'px';game.appendChild(pop);
+      setTimeout(function(){pop.remove()},700); b.remove();
+    });
+    game.appendChild(b); requestAnimationFrame(step);
+    setTimeout(spawn,380+Math.random()*320);
+  }
+  function endGame(){
+    running=false;
+    var msg = score>=40?'Legendary. You’d survive Silk Board. Reward: one kiss per point.'
+            : score>=20?'Pretty great! You’ve earned the window seat on the Rasta Cafe drive.'
+            : score>=5 ?'Not bad. Bangalore traffic is hard. I’ll drive, you pick the songs.'
+            : 'The traffic won this round. Good news: I’m excellent at consolation hugs.';
+    overlay.innerHTML='<div><p style="font-size:2rem;font-weight:750;color:var(--rose)">'+score+' points</p><p>'+msg+'</p><p style="margin-top:14px"><button class="btn yes" id="startGame">Play again</button></p></div>';
+    overlay.style.display='grid';
+    document.getElementById('startGame').addEventListener('click',startGame);
+    if(score>=20)confetti(30);
+  }
+  function startGame(){
+    score=0;scoreEl.textContent='0';overlay.style.display='none';running=true;
+    var t=20;timerEl.textContent=t+'s';
+    var iv=setInterval(function(){t--;timerEl.textContent=t+'s';if(t<=0){clearInterval(iv);endGame()}},1000);
+    spawn();
+  }
+  document.getElementById('startGame').addEventListener('click',startGame);
+
+  /* fortune */
+  var fortunes=['You will order the prettiest drink on the menu and I will pretend I’m not stealing sips.',
+    'A stranger will compliment your outfit. I will agree loudly.',
+    'Tonight you will laugh so hard at my joke that the bartender joins in.',
+    'Two cocktails in, you will tell me I’m cute. I will screenshot this prophecy as proof.',
+    'You will try the fried chicken and say “okay, this is unreal.”',
+    'A slow dance will happen somewhere it absolutely shouldn’t.',
+    'The bartender will make you something off-menu. You are that charming.',
+    'At some point I’ll just be staring at you. That’s not a fortune, it’s a guarantee.'];
+  var sh=document.getElementById('shaker'), fo=document.getElementById('fortune'), last=-1;
+  sh.addEventListener('click',function(){
+    sh.classList.remove('go');void sh.offsetWidth;sh.classList.add('go');fo.textContent='shaking…';
+    setTimeout(function(){var k;do{k=Math.floor(Math.random()*fortunes.length)}while(k===last);last=k;fo.textContent=fortunes[k]},reduce?0:600);
+  });
+
+  /* scratch coupons */
+  var coupons=[['I carry every bag at Mall of Asia','no complaints, ever'],['Win any one argument, instantly','use wisely'],
+    ['One kiss on demand','unlimited refills'],['Breakfast in bed, your order','redeem Saturday'],
+    ['The last bite of every dessert','all six days'],['One slow dance, anywhere','yes, even the mall']];
+  var cv=document.getElementById('scratchCanvas'), ctx=cv.getContext('2d'), cp=document.getElementById('coupon'), ci=-1, drawing=false, done=false;
+  function setupScratch(){
+    var k;do{k=Math.floor(Math.random()*coupons.length)}while(k===ci);ci=k;
+    cp.innerHTML='<div><b>'+coupons[k][0]+'</b><span>'+coupons[k][1]+'</span></div>';
+    var r=cv.getBoundingClientRect(), dpr=window.devicePixelRatio||1;
+    cv.width=r.width*dpr;cv.height=r.height*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);
+    ctx.globalCompositeOperation='source-over';
+    var gr=ctx.createLinearGradient(0,0,r.width,r.height);gr.addColorStop(0,'#E0335F');gr.addColorStop(1,'#F3A712');
+    ctx.fillStyle=gr;ctx.fillRect(0,0,r.width,r.height);
+    ctx.fillStyle='rgba(255,255,255,.9)';ctx.font='700 26px Caveat, cursive';ctx.textAlign='center';
+    ctx.fillText('scratch me ♥',r.width/2,r.height/2+8);
+    for(var i=0;i<14;i++){ctx.fillText('♥',Math.random()*r.width,Math.random()*r.height)}
+    cv.style.opacity=1;done=false;
+  }
+  function scratchAt(e){
+    var r=cv.getBoundingClientRect();ctx.globalCompositeOperation='destination-out';
+    ctx.beginPath();ctx.arc(e.clientX-r.left,e.clientY-r.top,22,0,Math.PI*2);ctx.fill();
+  }
+  function checkDone(){
+    if(done)return;var d=ctx.getImageData(0,0,cv.width,cv.height).data,clear=0,step=40;
+    for(var i=3;i<d.length;i+=4*step)if(d[i]===0)clear++;
+    if(clear/(d.length/(4*step))>.5){done=true;cv.style.transition='opacity .5s';cv.style.opacity=0;confetti(18)}
+  }
+  cv.addEventListener('pointerdown',function(e){drawing=true;cv.setPointerCapture(e.pointerId);scratchAt(e)});
+  cv.addEventListener('pointermove',function(e){if(drawing)scratchAt(e)});
+  cv.addEventListener('pointerup',function(){drawing=false;checkDone()});
+  cv.addEventListener('pointercancel',function(){drawing=false});
+  document.getElementById('newCoupon').addEventListener('click',function(){cv.style.transition='none';setupScratch()});
+
+  /* packing */
+  var packItems=['Comfy shoes for Cubbon Park','Your polaroid camera','Something gorgeous for Dali & Gala','A festive outfit for Diwali','Sunglasses for golden hour','Space in your bag for shopping','Your best smile (I miss it)'];
+  var saved={};try{saved=JSON.parse(store('pack')||'{}')}catch(e){saved={}}
+  var pk=document.getElementById('pack');
+  packItems.forEach(function(t,i){
+    var li=document.createElement('li');li.innerHTML='<label><input type="checkbox"'+(saved[i]?' checked':'')+'><span>'+t+'</span></label>';
+    li.querySelector('input').addEventListener('change',function(e){saved[i]=e.target.checked;store('pack',JSON.stringify(saved))});
+    pk.appendChild(li);
+  });
+
+  /* scratch canvas needs layout, so set up once content is visible */
+  var obs=new MutationObserver(function(){if(content.classList.contains('show')){setupScratch();obs.disconnect()}});
+  obs.observe(content,{attributes:true});
+  if(content.classList.contains('show'))setupScratch();
+  var lastW=window.innerWidth;
+  window.addEventListener('resize',function(){if(window.innerWidth===lastW)return;lastW=window.innerWidth;if(content.classList.contains('show')&&!done)setupScratch()});
+})();
+</script>
+</body>
+</html>
